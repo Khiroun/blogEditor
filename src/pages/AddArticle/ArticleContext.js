@@ -1,68 +1,71 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useReducer } from "react";
+import types from "./types";
 
 import { v4 as uuid } from "uuid";
-import axios from "axios";
 
 export const ArticleContext = createContext();
 
+const initialState = {
+  title: "",
+  author: "",
+  description: "",
+  sections: [],
+  image: null,
+  valid: "",
+};
+
+const reducer = (state, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case types.UPDATE_SECTION_TITLE:
+      return {
+        ...state,
+        sections: state.sections.map((s) => {
+          if (s.id === payload.id) {
+            s.title = payload.title;
+          }
+          return s;
+        }),
+      };
+    case types.UPDATE_SECTION_CONTENT:
+      return {
+        ...state,
+        sections: state.sections.map((s) => {
+          if (s.id === payload.id) {
+            s.content = payload.content;
+          }
+          return s;
+        }),
+      };
+    case types.REMOVE_SECTION:
+      return {
+        ...state,
+        sections: state.sections.filter((s) => s.id !== payload.id),
+      };
+    case types.ADD_SECTION:
+      return {
+        ...state,
+        sections: [...state.sections, { id: uuid(), ...payload.section }],
+      };
+
+    case types.SET_TITLE:
+      return { ...state, title: payload.title };
+    case types.SET_DESCRIPTION:
+      return { ...state, description: payload.description };
+    case types.SET_AUTHOR:
+      return { ...state, author: payload.author };
+    case types.SET_IMAGE:
+      return { ...state, image: payload.image };
+    case types.SUBMIT:
+      return { ...state };
+    default:
+      return { ...state };
+  }
+};
+
 export const ArticleProvider = (props) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [description, setDescription] = useState("");
-  const [sections, setSections] = useState([]);
-  const [image, setImage] = useState(null);
-  const [valid, setValid] = useState("");
-
-  const addSection = (section) => {
-    section.id = uuid();
-    setSections([...sections, section]);
-  };
-
-  const updateSectionTitle = (id, title) => {
-    const newSections = sections.map((s) => {
-      if (s.id === id) {
-        console.log("found");
-        s.title = title;
-      }
-      return s;
-    });
-    //console.log(newSections);
-    setSections(newSections);
-  };
-
-  const updateSectionContent = (id, content) => {
-    const newSections = sections.map((s) => {
-      if (s.id === id) {
-        s.content = content;
-      }
-      return s;
-    });
-    setSections(newSections);
-  };
-
-  const removeSection = (id) => {
-    setSections(sections.filter((s) => s.id !== id));
-  };
-
-  const validate = () => {
-    if (title === "" || author === "" || description === "")
-      return "Title, Author and Description fields cannot be empty";
-    if (!image) return "Please choose a valid Image File";
-    if (sections.length === 0) {
-      return "Please enter at least one section";
-    }
-    for (let i = 0; i < sections.length; i++) {
-      const s = sections[i];
-      if (s.title === "") {
-        return "Section Title cannot be empty";
-      }
-      if (s.content === "") {
-        return "Section content cannot be empty";
-      }
-    }
-    return "valid";
-  };
-
+  const [article, dispatch] = useReducer(reducer, initialState);
+  /*
   const submit = () => {
     setValid(validate());
     if (validate() === "valid") {
@@ -87,26 +90,32 @@ export const ArticleProvider = (props) => {
         .catch((e) => console.log(e));
     }
   };
+*/
 
-  const value = {
-    title,
-    setTitle,
-    author,
-    setAuthor,
-    description,
-    setDescription,
-    sections,
-    setSections,
-    image,
-    setImage,
-    addSection,
-    updateSectionTitle,
-    updateSectionContent,
-    removeSection,
-    submit,
-    valid,
+  const validate = () => {
+    if (
+      article.title === "" ||
+      article.author === "" ||
+      article.description === ""
+    )
+      return "Title, Author and Description fields cannot be empty";
+    if (!article.image) return "Please choose a valid Image File";
+    if (article.sections.length === 0) {
+      return "Please enter at least one section";
+    }
+    for (let i = 0; i < article.sections.length; i++) {
+      const s = article.sections[i];
+      if (s.title === "") {
+        return "Section Title cannot be empty";
+      }
+      if (s.content === "") {
+        return "Section content cannot be empty";
+      }
+    }
+    return "valid";
   };
 
+  const value = { article, dispatch, validate };
   return (
     <ArticleContext.Provider value={value}>
       {props.children}

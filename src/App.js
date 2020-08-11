@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 import Layout from "./components/Layout";
 
-import "./styles/style.css";
+//import "./styles/style.css";
 
 function App() {
   return (

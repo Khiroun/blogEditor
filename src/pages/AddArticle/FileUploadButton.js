@@ -1,34 +1,32 @@
-import React, { useState, useContext } from "react";
-import { ArticleContext } from "./ArticleContext";
+import React, { useState } from "react";
+import Form from "react-bootstrap/Form";
 
-const FileUploadButton = () => {
-  const { setImage } = useContext(ArticleContext);
+const FileUploadButton = ({ imageChange }) => {
   const [message, setMessage] = useState("No Image Added");
   const handleImageChange = (e) => {
-    const image = e.target.files[0];
-    const formData = new FormData();
-    formData.append("image", image, image.name);
-    setImage(formData);
+    imageChange(e);
     setMessage("Image Added successfully");
   };
   return (
-    <div className="file-upload">
-      <div className="file-select">
-        <div className="file-select-button" id="fileName">
-          Add Image for your article
+    <Form.Group>
+      <div className="file-upload">
+        <div className="file-select">
+          <div className="file-select-button" id="fileName">
+            Add Image for your article
+          </div>
+          <div className="file-select-name" id="noFile">
+            {message}
+          </div>
+          <Form.File
+            name="chooseFile"
+            id="chooseFile"
+            onChange={handleImageChange}
+            accept="image/*"
+            required={true}
+          />
         </div>
-        <div className="file-select-name" id="noFile">
-          {message}
-        </div>
-        <input
-          type="file"
-          name="chooseFile"
-          id="chooseFile"
-          onChange={handleImageChange}
-          accept="image/*"
-        />
       </div>
-    </div>
+    </Form.Group>
   );
 };
 

@@ -1,17 +1,20 @@
 import React from "react";
+import Form from "react-bootstrap/Form";
 
 const Title = ({ value, setValue, placeholder, textArea }) => {
   return (
     <div className="text-field">
       {textArea ? (
-        <textarea
+        <Form.Control
+          as="textarea"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder={placeholder}
           rows={5}
         />
       ) : (
-        <input
+        <Form.Control
+          type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder={placeholder}

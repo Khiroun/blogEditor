@@ -78,7 +78,7 @@ nav ul li {
   margin-bottom: 1rem;
 }
 
-.add .section-container button {
+.add .section-container .delete-button {
   width: 10rem;
   background-color: red;
   color: white;

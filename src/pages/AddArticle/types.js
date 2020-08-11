@@ -1,0 +1,10 @@
+const types = {
+  SET_TITLE: "SET_TITLE",
+  SET_AUTHOR: "SET_AUTHOR",
+  SET_DESCRIPTION: "SET_DESCRIPTION",
+  SET_IMAGE: "SET_IMAGE",
+  SET_BLOCKS: "SET_BLOCKS",
+  SUBMIT: "SUBMIT",
+};
+
+export default types;
