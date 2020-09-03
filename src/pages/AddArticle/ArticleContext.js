@@ -65,32 +65,6 @@ const reducer = (state, action) => {
 
 export const ArticleProvider = (props) => {
   const [article, dispatch] = useReducer(reducer, initialState);
-  /*
-  const submit = () => {
-    setValid(validate());
-    if (validate() === "valid") {
-      setTitle("");
-      setAuthor("");
-      setValid("Posting");
-      console.log("Posting");
-      const backendUrl = "https://europe-west2-lieven0.cloudfunctions.net/api/";
-      axios
-        .post(`${backendUrl}article`, { title, author, description, sections })
-        .then((res) => {
-          console.log("Item Added");
-          const data = res.data;
-          const id = data.id;
-          axios
-            .post(`${backendUrl}uploadImage?articleId=${id}`, image)
-            .then((res) => {
-              console.log("Image posted");
-              setValid("Article Added successfully");
-            });
-        })
-        .catch((e) => console.log(e));
-    }
-  };
-*/
 
   const validate = () => {
     if (

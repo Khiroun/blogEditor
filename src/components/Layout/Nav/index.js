@@ -2,21 +2,22 @@ import React from "react";
 
 import routes from "../routes";
 import { Link } from "react-router-dom";
+import { Navbar, Nav } from "react-bootstrap";
 
-const Nav = () => {
+const MyNav = () => {
   return (
-    <nav>
-      <ul>
+    <Navbar bg="light">
+      <Nav>
         {routes.map((r, i) => {
           return (
-            <li key={r.name + r.path + i}>
+            <Nav.Link key={r.name + r.path + i}>
               <Link to={r.path}>{r.name}</Link>
-            </li>
+            </Nav.Link>
           );
         })}
-      </ul>
-    </nav>
+      </Nav>
+    </Navbar>
   );
 };
 
-export default Nav;
+export default MyNav;

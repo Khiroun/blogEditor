@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer } from "react";
 import axios from "axios";
 import TextField from "./TextField";
 import FileUploadButton from "./FileUploadButton";
@@ -8,6 +8,7 @@ import Form from "react-bootstrap/Form";
 import EditorJs from "react-editor-js";
 import { EDITOR_JS_TOOLS } from "./editorJsTools";
 import { Container } from "react-bootstrap";
+import { getBackendUrl } from "../../utils";
 
 const initialState = {
   title: "",
@@ -41,7 +42,6 @@ const reducer = (state, action) => {
 
 const AddArticle = () => {
   const [article, dispatch] = useReducer(reducer, initialState);
-  const [submitting, setSubmitting] = useState(false);
   const validate = () => {
     if (
       article.title === "" ||
@@ -68,19 +68,15 @@ const AddArticle = () => {
     const { title, author, description, blocks, image } = article;
     const sections = blocks;
     if (validate() === "valid") {
-      //const backendUrl = "https://europe-west2-lieven0.cloudfunctions.net/api";
-      const backendUrl = "http://localhost:5000/lieven0/europe-west2/api";
+      const backendUrl = getBackendUrl();
       axios
         .post(`${backendUrl}/article`, { title, author, description, sections })
         .then((res) => {
-          console.log("Item Added");
           const data = res.data;
           const id = data.id;
           axios
             .post(`${backendUrl}/uploadImage?articleId=${id}`, image)
-            .then((res) => {
-              console.log("Image posted");
-            });
+            .then((res) => {});
         })
         .catch((e) => console.log(e));
     }
@@ -137,7 +133,6 @@ const AddArticle = () => {
                   blocks: data.blocks,
                 },
               });
-              console.log({ article });
             }}
           />
         </Form.Group>
